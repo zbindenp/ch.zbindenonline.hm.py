@@ -16,8 +16,8 @@ setup(
     install_requires=['paho-mqtt', 'requests', 'click'],
     entry_points={
         'console_scripts':[
-        'saveMeasures=ch.zbindenonline.weatherstation.tinkertest:main',
-        'publishMeasures=ch.zbindenonline.weatherstation.publish:main',
+            'saveMeasures=ch.zbindenonline.weatherstation.saveMeasures:main',
+            'publishMeasures=ch.zbindenonline.weatherstation.publishMeasures:main',
         'publishPictures=ch.zbindenonline.weatherstation.publishPictures:main'
         ]
     },

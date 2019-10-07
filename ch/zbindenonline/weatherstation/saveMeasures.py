@@ -1,10 +1,11 @@
-import time
+import argparse
 import datetime
 import logging
-import argparse
 import sqlite3
-from .mqtt import TinkerforgeBroker
+import time
+
 from .config import *
+from .mqtt import TinkerforgeBroker
 
 waitForSensors = 10
 
@@ -21,6 +22,7 @@ class SensorData:
 
 class DataHandler:
     def __init__(self, sensor_mapping):
+        logging.info(sensor_mapping)
         self._sensor_mapping = sensor_mapping
         self.sensors = None
 
@@ -39,7 +41,6 @@ class DataHandler:
 
 def readConfiguration():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-w", "--wait", help="wait in seconds between publish", type=int, default=300)
     parser.add_argument("-c", "--config", help="config file", type=str, default='weatherstation.cfg')
     parser.add_argument("-l", "--log", help="level to log", type=str, default="INFO")
     args = parser.parse_args()

@@ -1,4 +1,5 @@
-import configparser, json
+import configparser
+import json
 
 
 def createConfig(args):
@@ -15,7 +16,7 @@ def createConfig(args):
     pictureConf = PicturesConfig(picture.get('picture_dir'), picture.get('picture_url'),
                                  picture.get('delete_after_publish'))
 
-    return Config(brokerConf, restConf, pictureConf, args.log.upper(), args.wait, sensors, default.get('database'))
+    return Config(brokerConf, restConf, pictureConf, args.log.upper(), sensors, default.get('database'))
 
 
 class Config:
