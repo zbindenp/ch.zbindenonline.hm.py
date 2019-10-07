@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="ch.zbindenonline.weatherstation",
-    version="0.2a",
+    version="0.4a",
     description="Collects data from tinkerforge outdoor weather station and saves it to sqlite database.",
     license="MIT",
     author="Patrick Zbinden",
