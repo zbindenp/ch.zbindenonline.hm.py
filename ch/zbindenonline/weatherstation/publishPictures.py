@@ -1,26 +1,29 @@
 import argparse
-import logging
 import datetime
+import logging
 import os
+import sys
 from pathlib import Path
 
 import requests
-import sys
+
 from .config import *
 
 
 class RestService:
-    def __init__(self, url, username, password):
+    def __init__(self, url, client_id, client_secret, username, password):
         self.url = url
-        self.auth = {'username': username, 'password': password}
+        self.auth = {'grant_type': 'password', 'client_id': client_id, 'client_secret': client_secret,
+                     'username': username, 'password': password}
         self.headers = {'User-Agent': 'python'}
         self.login()
 
     def login(self):
-        return
-        logging.debug("Try to login to " + self.url + '/login')
+        logging.debug("Try to login to " + self.url + '/oauth/token')
+        logging.debug(json.dumps(self.auth))
         try:
-            response = requests.post(self.url + '/login', data=json.dumps(self.auth), headers=self.headers)
+            loginHeaders = {'Content-Type': 'application/json'}
+            response = requests.post(self.url + '/oauth/token', data=json.dumps(self.auth), headers=loginHeaders)
         except requests.exceptions.RequestException as e:
             logging.exception("RequestException occured: " + str(e))
             sys.exit(1)
@@ -31,7 +34,7 @@ class RestService:
         logging.debug(str_response)
         if str_response:
             jwtdata = json.loads(str_response)
-            jwt = jwtdata['access_jwt']
+            jwt = jwtdata['access_token']
             logging.info(jwt)
             self.headers['Authorization'] = 'Bearer ' + jwt
 
@@ -82,7 +85,8 @@ def main():
     config = read_configuration()
     configure_logging(config.loglevel)
     try:
-        service = RestService(config.pictures.picture_url, config.rest.username, config.rest.password)
+        service = RestService(config.pictures.picture_url, config.pictures.client_id, config.pictures.client_secret,
+                              config.pictures.username, config.pictures.password)
         pictures = get_pictures(config.pictures.picture_dir);
         postedPictures = 0;
         for picture in pictures:
