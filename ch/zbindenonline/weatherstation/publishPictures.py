@@ -11,8 +11,9 @@ from .config import *
 
 
 class RestService:
-    def __init__(self, url, client_id, client_secret, username, password):
+    def __init__(self, url, camera_id, client_id, client_secret, username, password):
         self.url = url
+        self.camera_id = camera_id
         self.auth = {'grant_type': 'password', 'client_id': client_id, 'client_secret': client_secret,
                      'username': username, 'password': password}
         self.headers = {'User-Agent': 'python'}
@@ -47,7 +48,8 @@ class RestService:
         picture_data = {'taken_at': taken_at.strftime("%Y-%m-%d %H:%M:%S")}
         logging.debug(picture_data)
         file = {'image': open(picture, 'rb')}
-        response = requests.post(self.url + '/pictures', files=file, data=picture_data, headers=self.headers)
+        response = requests.post(self.url + '/cameras/' + self.camera_id + '/pictures', files=file, data=picture_data,
+                                 headers=self.headers)
         logging.debug(response)
         if not response.ok:
             json_data = json.loads(response.text)
@@ -85,7 +87,8 @@ def main():
     config = read_configuration()
     configure_logging(config.loglevel)
     try:
-        service = RestService(config.pictures.picture_url, config.pictures.client_id, config.pictures.client_secret,
+        service = RestService(config.pictures.picture_url, config.pictures.camera_id, config.pictures.client_id,
+                              config.pictures.client_secret,
                               config.pictures.username, config.pictures.password)
         pictures = get_pictures(config.pictures.picture_dir);
         postedPictures = 0;

@@ -15,6 +15,7 @@ def createConfig(args):
     picture = config['pictures']
     pictureConf = PicturesConfig(picture.get('client_id'), picture.get('client_secret'), picture.get('username'),
                                  picture.get('password'), picture.get('picture_dir'), picture.get('picture_url'),
+                                 picture.get('camera_id'),
                                  picture.get('delete_after_publish'))
 
     return Config(brokerConf, restConf, pictureConf, args.log.upper(), sensors, default.get('database'))
@@ -47,11 +48,13 @@ class RestConfig:
 
 
 class PicturesConfig:
-    def __init__(self, client_id, client_secret, username, password, picture_dir, picture_url, delete_after_publish):
+    def __init__(self, client_id, client_secret, username, password, picture_dir, picture_url, camera_id,
+                 delete_after_publish):
         self.client_id = client_id
         self.client_secret = client_secret
         self.username = username
         self.password = password
         self.picture_dir = picture_dir
         self.picture_url = picture_url
+        self.camera_id = camera_id
         self.delete_after_publish = delete_after_publish
