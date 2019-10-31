@@ -7,7 +7,7 @@ import time
 from .config import *
 from .mqtt import TinkerforgeBroker
 
-waitForSensors = 10
+waitForSensors = 20
 
 
 class SensorData:
@@ -67,6 +67,7 @@ def saveToDatabase(database, sensors, sensor_mapping):
             conf_name = sensor_mapping.get(sensor.identifier)['name']
             sens = sensorsMap.get(conf_name)
             if sens is None:
+                logging.debug('insert sensor into database')
                 cur = conn.cursor()
                 cur.execute('INSERT OR IGNORE INTO sensor(name) values(?)', (conf_name,))
                 sens = cur.lastrowid

@@ -18,7 +18,7 @@ setup(
         'console_scripts':[
             'saveMeasures=ch.zbindenonline.weatherstation.saveMeasures:main',
             'publishMeasures=ch.zbindenonline.weatherstation.publishMeasures:main',
-        'publishPictures=ch.zbindenonline.weatherstation.publishPictures:main'
+            'publishPictures=ch.zbindenonline.weatherstation.publishPictures:main'
         ]
     },
     long_description=long_description,
