@@ -22,9 +22,8 @@ def createConfig(args):
 
 
 class Config:
-    def __init__(self, broker, rest, pictures, loglevel='INFO', wait=300, sensors='{}', database='dorben.db'):
+    def __init__(self, broker, rest, pictures, loglevel='INFO', sensors='{}', database='dorben.db'):
         self.loglevel = loglevel
-        self.wait = wait
         self.sensors = sensors
         self.broker = broker
         self.database = database

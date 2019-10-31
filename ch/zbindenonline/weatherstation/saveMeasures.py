@@ -22,7 +22,7 @@ class SensorData:
 
 class DataHandler:
     def __init__(self, sensor_mapping):
-        logging.info(sensor_mapping)
+        logging.info('SensorMapping: ' + str(sensor_mapping))
         self._sensor_mapping = sensor_mapping
         self.sensors = None
 
@@ -104,6 +104,7 @@ def main():
     config = readConfiguration()
     configureLogging(config.loglevel)
     configureDatabase(config.database)
+    logging.debug('AHA')
 
     datahandler = DataHandler(config.sensors)
     broker = connectToBroker(config.broker, datahandler)
