@@ -19,7 +19,7 @@ class RestService:
     def login(self):
         logging.debug("Try to login to " + self.url + '/login')
         try:
-            response = requests.post(self.url + '/login', data=json.dumps(self.auth), headers=self.headers)
+            response = requests.post(self.url + '/login', data=json.dumps(self.auth), headers=self.headers, timeout=20)
         except requests.exceptions.RequestException as e:
             logging.exception("RequestException occured: " + str(e))
             sys.exit(1)
@@ -35,7 +35,7 @@ class RestService:
             self.headers['Authorization'] = 'Bearer ' + jwt
 
     def get_sensors(self):
-        response = requests.get(self.url + '/sensors', headers=self.headers)
+        response = requests.get(self.url + '/sensors', headers=self.headers, timeout=10)
         logging.info(response)
         if response.ok:
             str_response = response.content.decode('utf-8')
@@ -45,7 +45,7 @@ class RestService:
             response.raise_for_status()
 
     def get_last_timestamp(self, sensorId):
-        response = requests.get(self.url + '/measures/last?sensor=' + sensorId, headers=self.headers)
+        response = requests.get(self.url + '/measures/last?sensor=' + sensorId, headers=self.headers, timeout=10)
         if response.ok:
             str_response = response.content.decode('utf-8')
             logging.debug(str_response)
@@ -59,7 +59,7 @@ class RestService:
     def post_measure(self, measure):
         logging.debug('Headers:')
         logging.debug(self.headers)
-        response = requests.post(self.url + '/measures', data=measure, headers=self.headers)
+        response = requests.post(self.url + '/measures', data=measure, headers=self.headers, timeout=120)
         logging.debug(response)
         if not response.ok:
             response.raise_for_status()

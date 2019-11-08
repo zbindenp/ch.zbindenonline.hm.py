@@ -24,7 +24,8 @@ class RestService:
         logging.debug(json.dumps(self.auth))
         try:
             loginHeaders = {'Content-Type': 'application/json'}
-            response = requests.post(self.url + '/oauth/token', data=json.dumps(self.auth), headers=loginHeaders)
+            response = requests.post(self.url + '/oauth/token', data=json.dumps(self.auth), headers=loginHeaders,
+                                     timeout=20)
         except requests.exceptions.RequestException as e:
             logging.exception("RequestException occured: " + str(e))
             sys.exit(1)
@@ -49,7 +50,7 @@ class RestService:
         logging.debug(picture_data)
         file = {'image': open(picture, 'rb')}
         response = requests.post(self.url + '/cameras/' + self.camera_id + '/pictures', files=file, data=picture_data,
-                                 headers=self.headers)
+                                 headers=self.headers, timeout=120)
         logging.debug(response)
         if not response.ok:
             json_data = json.loads(response.text)
