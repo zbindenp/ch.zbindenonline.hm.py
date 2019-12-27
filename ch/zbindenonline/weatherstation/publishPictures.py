@@ -37,7 +37,7 @@ class RestService:
         if str_response:
             jwtdata = json.loads(str_response)
             jwt = jwtdata['access_token']
-            logging.info(jwt)
+            logging.debug(jwt)
             self.headers['Authorization'] = 'Bearer ' + jwt
 
     def post_picture(self, picture):
@@ -50,11 +50,16 @@ class RestService:
         logging.debug(picture_data)
         file = {'image': open(picture, 'rb')}
         response = requests.post(self.url + '/cameras/' + self.camera_id + '/pictures', files=file, data=picture_data,
-                                 headers=self.headers, timeout=120)
+                                 headers=self.headers, timeout=150)
         logging.debug(response)
-        if not response.ok:
-            json_data = json.loads(response.text)
-            logging.error(json_data)
+        if response.ok:
+            logging.info('Successfully posted picture ' + picture)
+        else:
+            logging.error('Posting picture ' + picture + ' had an error')
+            logging.error('Raw error: ' + response.text)
+            str_response = response.content.decode('utf-8')
+            json_data = json.loads(str_response)
+            logging.error('Json error: ' + json_data)
             response.raise_for_status()
 
 
@@ -105,7 +110,7 @@ def main():
                         logging.debug('Delete ' + picture)
                         os.remove(picture)
                 except Exception as e:
-                    logging.warning('There was en Exception in posting picture' + str(e))
+                    logging.warning('There was an Exception in posting picture ' + picture + ': ' + str(e))
 
             elapsed_time = datetime.datetime.now() - start
             logging.info('Posted ' + str(postedPictures) + ' in ' + str(elapsed_time))
