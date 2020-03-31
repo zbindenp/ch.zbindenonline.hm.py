@@ -2,6 +2,7 @@ import argparse
 import datetime
 import logging
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -44,7 +45,13 @@ class RestService:
         # logging.debug('Headers:')
         # logging.debug(self.headers)
         filename = Path(picture).with_suffix('').name
-        taken_at = datetime.datetime.strptime(filename, '%Y-%m-%d_%H%M')
+        if re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{6}', filename):
+            taken_at = datetime.datetime.strptime(filename, '%Y-%m-%d_%H%M%S')
+        elif re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{4}', filename):
+            taken_at = datetime.datetime.strptime(filename, '%Y-%m-%d_%H%M')
+        else:
+            logging.warning('Unsupported file format ' + picture)
+            return
         logging.debug(taken_at)
         picture_data = {'taken_at': taken_at.strftime("%Y-%m-%d %H:%M:%S")}
         logging.debug(picture_data)
